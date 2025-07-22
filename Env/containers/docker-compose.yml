@@ -1,0 +1,37 @@
+services:
+  db-app:
+    container_name: db-app_container
+    image: db-app:v1.0
+    ports:
+      - "${DATABASE_EXPOSE_PORT}:${DATABASE_PORT}"
+    environment:
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+
+  writer-app:
+    container_name: writer-app_container
+    image: writer-app:v1.0
+    ports:
+      - "${WRITER_EXPOSE_PORT}:${WRITER_PORT}"
+    environment:
+      DATABASE_HOST: ${DATABASE_HOST}           # Service name for the database container
+      DATABASE_PORT: ${DATABASE_PORT}           # Port exposed by the database container
+      DATABASE_USER: ${DATABASE_USER}   
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_NAME: ${DATABASE_NAME}           # Database, and table were created during building of db-app container
+      DATABASE_TABLE_NAME: ${DATABASE_TABLE_NAME}  
+      WRITER_PORT: ${WRITER_PORT}
+
+  reader-app:
+    container_name: reader-app_container
+    image: reader-app:v1.0
+    ports:
+      - "${READER_EXPOSE_PORT}:${READER_PORT}"
+    environment:
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_PORT: ${DATABASE_PORT}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_TABLE_NAME: ${DATABASE_TABLE_NAME}
+      READER_PORT: ${READER_PORT}

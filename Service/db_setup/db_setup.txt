@@ -1,0 +1,41 @@
+DatabaseName    : messagedb
+TableName       : message  
+
+# Step 1: Delete the DB (if exists)
+    > sudo -u postgres dropdb messagedb
+
+# Step 2: Create DB
+    > sudo -u postgres createdb messagedb
+
+# Step 3: Go inside the psql, connect to it and create table
+    > sudo -u postgres psql
+    > \c messagedb
+    > CREATE TABLE IF NOT EXISTS message (
+        id SERIAL PRIMARY KEY,
+        content TEXT NOT NULL
+    );
+\q
+
+
+###### Create DB image with DB, and Table ######
+
+pg-init-demo/
+├── Dockerfile
+└── init.sql
+
+docker build -t db-app:1.0 .
+
+Run the Container:
+-----------------------
+docker run -d \
+  --name new-db \
+  -e POSTGRES_USER=postgres \
+  -e POSTGRES_PASSWORD=postgres \
+  -p 5433:5432 \
+  db-app:1.0
+
+Or docker-compose.yml : docker compose up d
+
+Test the Setup:
+-------------------
+docker exec -it db-app_container psql -U postgres -d messagedb

@@ -1,0 +1,45 @@
+services:
+  db-app:
+    container_name: db-app_container
+    image: db-app:v1.0
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    networks:
+      - writer-app-network
+      - reader-app-network
+  
+  writer-app:
+    container_name: writer-app_container
+    image: writer-app:v1.0
+    ports:
+      - "8080:5000"
+    networks:
+      - writer-app-network
+
+  reader-app:
+    container_name: reader-app_container
+    image: reader-app:v1.0
+    ports:
+      - "8081:5001"
+    networks:
+      - reader-app-network
+
+networks:
+  writer-app-network:
+    driver: bridge
+    
+  reader-app-network:
+    driver: bridge
+
+# Based on the above docker-compose.yml, we can run the following commands to start the services:
+
+# Ensure my-bridge Docker network exists before running these: docker network create my-bridge
+
+# The -h option sets the hostname inside the container, just like Docker Compose service names.
+
+# docker run -d --name db-app_container -h db-app -p 5433:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres --network my-bridge db-app:v1.0
+# docker run -d --name writer-app_container -h writer-app -p 8080:5000 --network my-bridge writer-app:v1.0
+# docker run -d --name reader-app_container -h reader-app -p 8081:5001 --network my-bridge reader-app:v1.0

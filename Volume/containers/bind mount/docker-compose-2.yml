@@ -1,0 +1,37 @@
+# Multiple Docker containers sharing same volume.
+
+services:
+  db-app:
+    container_name: db-app_container
+    image: db-app:v1.0
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./hostdata:/var/lib/postgresql/data
+  
+  writer-app:
+    container_name: writer-app_container
+    image: writer-app:v1.0
+    ports:
+      - "8080:5000"
+
+  reader-app:
+    container_name: reader-app_container
+    image: reader-app:v1.0
+    ports:
+      - "8081:5001"
+  
+  writer-app-2:
+    container_name: writer-app_container-2
+    image: writer-app:v1.0
+    ports:
+      - "8083:5000"
+
+  reader-app-2:
+    container_name: reader-app_container-2
+    image: reader-app:v1.0
+    ports:
+      - "8084:5001"

@@ -1,0 +1,27 @@
+services:
+  db-app:
+    container_name: db-app_container
+    image: db-app:v1.0
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+  
+  writer-app:
+    container_name: writer-app_container
+    image: writer-app:v1.0
+    ports:
+      - "8080:5000"
+    depends_on:
+      - db-app
+    entrypoint: ["./wait-for-it.sh", "db-app:5432", "--", "python", "app.py"]
+
+  reader-app:
+    container_name: reader-app_container
+    image: reader-app:v1.0
+    ports:
+      - "8081:5001"
+    depends_on:
+      - db-app
+    entrypoint: ["./wait-for-it.sh", "db-app:5432", "--", "python", "app.py"]
