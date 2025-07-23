@@ -1,0 +1,50 @@
+1. Install PostgreSQL (if not already installed)
+sudo apt update
+sudo apt install postgresql postgresql-contrib
+
+2. Default Superuser & Password
+	> Default PostgreSQL superuser: postgres
+	> Default password: not set (uses peer authentication by default, i.e., login via system user postgres)
+	> To set a password:
+		sudo -i -u postgres
+		psql
+		ALTER USER postgres WITH PASSWORD 'postgres';
+		\q
+		exit
+		
+3. Switch to PostgreSQL user & open prompt
+	sudo -u postgres psql
+	
+4. List Databases
+	\l
+	
+5. Connect to a Database
+	\c database_name
+
+6. List tables
+	\dt
+
+7. Describe Table
+	\d table_name 
+	
+SELECT * FROM table_name;
+DROP TABLE table_name;
+
+8. Drop a Database
+	> Exit psql first: \q
+	> sudo -u postgres dropdb webappdb
+	
+9. Create DB and table
+	> sudo -u postgres createdb webappdb
+	> \c mydb
+	> CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    name TEXT,\c WebAppDb
+    age INT
+);
+
+10. Find Port PostgreSQL is Listening On Default is 5432, confirm with:
+	> sudo netstat -plunt | grep postgres
+	
+
+

@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Writer App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="card shadow-lg">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0">Writer App</h3>
+            </div>
+            <div class="card-body">
+                <form method="POST" id="messageForm">
+                    <div class="mb-3">
+                        <label for="messageInput" class="form-label">Enter your message:</label>
+                        <input type="text" class="form-control" id="messageInput" name="message" required>
+                    </div>
+                    <button type="submit" class="btn btn-success">Submit Message</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS (for smooth transitions if needed) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

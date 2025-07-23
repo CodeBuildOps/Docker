@@ -1,0 +1,49 @@
+Install the below dependencies to run the application locally:
+-----------------------------------------------------------------
+
+Python:
+------------------------------
+Install Python3 : sudo apt install python3
+Install PIP     : sudo apt install python3-pip
+Verify PIP      : pip3
+
+Install flask   : pip install flask --break-system-packages
+Install psycopg2: pip install psycopg2-binary --break-system-packages
+
+
+PostgreSQL:
+------------------------------
+sudo apt update
+sudo apt install -y postgresql postgresql-contrib
+
+------------------------------------------------------------------------------------------------------------------------
+
+Create DB and table
+------------------------------
+
+Step 1: Drop the Database (if it exists)
+        > sudo -u postgres dropdb messagedb
+
+Step 2: Create a New Database
+        > sudo -u postgres createdb messagedb
+
+Step 3: Connect to PostgreSQL and Create the Table
+        > sudo -u postgres psql
+        Inside psql, run:
+            > \c messagedb
+            > CREATE TABLE IF NOT EXISTS message (
+                id SERIAL PRIMARY KEY,
+                content TEXT NOT NULL
+            );
+        Exit with:
+            > \q
+
+Step 4: Create Superuser password
+	> Default PostgreSQL superuser: postgres
+	> Default password: not set (uses peer authentication by default, i.e., login via system user postgres)
+	> To set a password:
+		sudo -i -u postgres
+		psql
+		ALTER USER postgres WITH PASSWORD 'postgres';
+		\q
+		exit
