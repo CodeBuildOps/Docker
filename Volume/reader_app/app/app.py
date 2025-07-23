@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify
 import psycopg2
 from psycopg2 import sql
 
@@ -7,7 +7,6 @@ app = Flask(__name__)
 ReaderPort = 5001
 DBPort = 5432
 
-# DB config
 DB_NAME = 'messagedb'
 TABLE_NAME = 'message'
 
@@ -15,7 +14,7 @@ DB_CONFIG = {
     'dbname': DB_NAME,
     'user': 'postgres',
     'password': 'postgres',
-    'host': 'db-app',    # Update to localhost if running locally, othwise use the service name
+    'host': 'db-app', 
     'port': DBPort
 }
 
@@ -25,6 +24,10 @@ def query_db(query, args=None, fetch=False):
             cur.execute(sql.SQL(query).format(sql.Identifier(TABLE_NAME)), args or ())
             if fetch:
                 return cur.fetchall()
+
+@app.route('/health')
+def health():
+    return "OK", 200
 
 @app.route('/')
 def index():
@@ -43,7 +46,7 @@ def index():
                 table_exists = cur.fetchone()[0]
 
                 if not table_exists:
-                    return "❌ Table does not exist in the database. Please contact the administrator.", 500
+                    return "❌ Table does not exist in the database.", 500
         
         return render_template('index.html')
     
@@ -66,4 +69,5 @@ def delete_all():
     return '', 204
 
 if __name__ == '__main__':
+    # ⚠️ No DB check here — app will start regardless of DB state
     app.run(host='0.0.0.0', port=ReaderPort)

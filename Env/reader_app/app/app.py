@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify
 import psycopg2
 from psycopg2 import sql
 import os
@@ -19,6 +19,10 @@ def query_db(query, args=None, fetch=False):
             cur.execute(sql.SQL(query).format(sql.Identifier(os.environ['DATABASE_TABLE_NAME'])), args or ())
             if fetch:
                 return cur.fetchall()
+
+@app.route('/health')
+def health():
+    return "OK", 200
 
 @app.route('/')
 def index():
@@ -60,4 +64,5 @@ def delete_all():
     return '', 204
 
 if __name__ == '__main__':
+    # ⚠️ No DB check here — app will start regardless of DB state
     app.run(host='0.0.0.0', port=os.environ['READER_PORT'])

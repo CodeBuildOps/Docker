@@ -16,13 +16,10 @@ DB_CONFIG = {
 def get_db_connection():
     return psycopg2.connect(**DB_CONFIG)
 
-@app.route('/', methods=['GET', 'POST'])
-def index():
+def check_db_status():
     try:
-        # Check DB connection and table presence
         with get_db_connection() as conn:
             with conn.cursor() as cur:
-                # Check if table exists
                 cur.execute("""
                     SELECT EXISTS (
                         SELECT FROM information_schema.tables 
@@ -30,10 +27,19 @@ def index():
                         AND table_name = %s
                     )
                 """, (os.environ['DATABASE_TABLE_NAME'],))
-                table_exists = cur.fetchone()[0]
+                return cur.fetchone()[0]
+    except Exception as e:
+        raise RuntimeError(f"❌ DB error: {e}")
 
-                if not table_exists:
-                    return "❌ Table does not exist in the database. Please contact the administrator.", 500
+@app.route('/health')
+def health():
+    return "OK", 200
+
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    try:
+        if not check_db_status():
+            return f"❌ Table '{os.environ['DATABASE_TABLE_NAME']}' does not exist in database.", 500
 
         if request.method == 'POST':
             msg = request.form['message']
@@ -48,7 +54,8 @@ def index():
         return render_template('index.html')
 
     except Exception as e:
-        return f"❌ Error connecting to database or checking table: {e}", 500
+        return f"❌ Route: index(): {e}", 500
 
 if __name__ == '__main__':
+    # ⚠️ No DB check here — app will start regardless of DB state
     app.run(host='0.0.0.0', port=os.environ['WRITER_PORT'])
