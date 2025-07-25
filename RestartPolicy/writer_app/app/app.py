@@ -56,7 +56,8 @@ def index():
                     conn.commit()
             return redirect('/')
 
-        return render_template('index.html')
+         # Get pod or container ID (in Kubernetes, HOSTNAME is typically the pod name)
+        return render_template('index.html', container_id=os.environ.get('HOSTNAME', 'Unknown'))
 
     except Exception as e:
         return f"❌ Route: index(): {e}", 500

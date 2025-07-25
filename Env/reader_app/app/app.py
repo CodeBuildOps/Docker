@@ -43,7 +43,8 @@ def index():
                 if not table_exists:
                     return "❌ Table does not exist in the database. Please contact the administrator.", 500
         
-        return render_template('index.html')
+         # Get pod or container ID (in Kubernetes, HOSTNAME is typically the pod name)
+        return render_template('index.html', container_id=os.environ.get('HOSTNAME', 'Unknown'))
     
     except Exception as e:
         return f"❌ Error connecting to database or checking table: {e}", 500
