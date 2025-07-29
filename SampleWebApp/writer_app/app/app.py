@@ -1,6 +1,7 @@
 from flask import Flask, request, redirect, render_template
 import psycopg2
 from psycopg2 import sql
+import os
 
 app = Flask(__name__)
 
